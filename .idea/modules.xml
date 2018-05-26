@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tronwallet.iml" filepath="$PROJECT_DIR$/.idea/modules/tronwallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tronwallet_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tronwallet_main.iml" group="tronwallet" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tronwallet_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tronwallet_test.iml" group="tronwallet" />
+    </modules>
+  </component>
+</project>
