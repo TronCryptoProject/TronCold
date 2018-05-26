@@ -65,12 +65,9 @@ public class WalletClient {
 
   {
     try{
-      File file = new File(getClass().getResource("/tronks.ks").getFile());
-      FileInputStream fs = new FileInputStream(file);
-      byte[] str = new byte[(int)file.length()];
-      fs.read(str);
-      fs.close();
-      encryption = new Encryption(new String(str));
+      InputStream inputStream = getClass().getResourceAsStream("/tronks.ks");
+      String data = FileUtil.readFromInputStream(inputStream);
+      encryption = new Encryption(data.trim());
     }catch (Exception e){}
   }
 

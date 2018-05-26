@@ -2,10 +2,9 @@ package org.tron.walletcli;
 
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.*;
+import org.tron.common.utils.FileUtil;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.security.KeyStore;
 
 
@@ -17,15 +16,17 @@ public class TronClientAPI {
 
     {
         try{
-            File file = new File(getClass().getResource("/tronks.ks").getFile());
-            FileInputStream fs = new FileInputStream(file);
-            byte[] str = new byte[(int)file.length()];
-            fs.read(str);
-            fs.close();
-            encryption = new Encryption(new String(str));
-        }catch (Exception e){}
+            InputStream inputStream = getClass().getResourceAsStream("/tronks.ks");
+            String data = FileUtil.readFromInputStream(inputStream);
+            System.out.println("STRING IS: " + data);
+            encryption = new Encryption(data.trim());
+        }catch (Exception e){
+            //e.printStackTrace();
+            System.out.println("INITEXCEPTION: " + e.getMessage());
+        }
 
     }
+
 
     @RequestMapping(value="/registerWallet", method=RequestMethod.POST)
     public String registerWallet(@RequestParam("password") String password,
