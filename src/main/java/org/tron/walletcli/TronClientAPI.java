@@ -21,7 +21,6 @@ public class TronClientAPI {
             System.out.println("STRING IS: " + data);
             encryption = new Encryption(data.trim());
         }catch (Exception e){
-            //e.printStackTrace();
             System.out.println("INITEXCEPTION: " + e.getMessage());
         }
 
