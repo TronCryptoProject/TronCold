@@ -229,15 +229,8 @@ public class TronClient {
         json_obj.put("result", FAILED);
         json_obj.put("reason", "Prepare transaction failed.");
 	}else{
-	  byte[] data_bytes = new byte[res_tx.getSerializedSize()];
 
-	  try{
-		  res_tx.writeTo(CodedOutputStream.newInstance(data_bytes));
-	  }catch (IOException e) {
-          json_obj.put("result", FAILED);
-          json_obj.put("reason", "Transaction write failed: " + e.getMessage());
-		  return json_obj;
-	  }
+	  byte[] data_bytes = res_tx.toByteArray();
 
 	  if (res_tx.hasRawData()){
 	  	  json_obj.put("data", ByteUtil.toHexString(data_bytes));
@@ -321,6 +314,7 @@ public class TronClient {
 			  json_obj.put("to", toAddressHex);
 			  json_obj.put("amount", amount);
 
+
 		  }catch(InvalidProtocolBufferException e){
               json_obj.put("result", FAILED);
               json_obj.put("reason", "Unable to fetch transaction contract details.");
@@ -385,27 +379,22 @@ public class TronClient {
         return json_obj;
 	}
 
+
 	Transaction res_tx = wallet.signTransaction(transaction);
+
 
 	if (res_tx == null){
         json_obj.put("result", FAILED);
         json_obj.put("reason", "Could not sign transaction.");
         return json_obj;
 	}else{
-	   
-	  byte[] data_bytes = new byte[res_tx.getSerializedSize()];
-	  try{
-		  res_tx.writeTo(CodedOutputStream.newInstance(data_bytes));
-	  }catch (IOException e){
-          json_obj.put("result", FAILED);
-          json_obj.put("reason", "Signed transaction write failed: " + e.getMessage());
-          return json_obj;
-	  }
+
+	  byte[] data_bytes = res_tx.toByteArray();
 
 
 	  if (res_tx.hasRawData()){
 
-		try{
+		  try{
 			json_obj.put("data", ByteUtil.toHexString(data_bytes));
 			json_obj.put("timestamp", res_tx.getRawData().getTimestamp());
 			json_obj.put("refblocknum", res_tx.getRawData().getRefBlockNum());
@@ -465,8 +454,6 @@ public class TronClient {
 		json_obj.put("timestamp", df.format(date));
 		tx_obj.put("timestamp", df.format(date));
 
-		System.out.println("timestamp long: " + json_obj.get("timestamp"));
-		System.out.println("timestamp: " + df.format(date));
 		wallet.addSignedTransaction(tx_obj);
 
 	  }else{

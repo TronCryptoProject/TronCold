@@ -358,22 +358,20 @@ public class WalletClient {
     transferContractBuilder.setOwnerAddress(bsOwner);
     transferContractBuilder.setAmount(amount);
     Contract.TransferContract tContract = transferContractBuilder.build();
-
-    Transaction.Builder transactionBuilder = Transaction.newBuilder();
+    Transaction.raw.Builder rawtransactionBuilder = Transaction.raw.newBuilder();
     Transaction.Contract.Builder contractBuilder = Transaction.Contract.newBuilder();
 
     try {
       Any anyTo = Any.pack(tContract);
-      contractBuilder.setParameter(anyTo);
+      contractBuilder.setParameter(anyTo).build();
     } catch (Exception e) {
       return null;
     }
-
     contractBuilder.setType(Transaction.Contract.ContractType.TransferContract);
-    transactionBuilder.getRawDataBuilder().addContract(contractBuilder);
-    transactionBuilder.getRawDataBuilder().setType(Transaction.TransactionType.ContractType);
+    rawtransactionBuilder.addContract(contractBuilder);
 
-    Transaction transaction = transactionBuilder.build();
+    Transaction transaction = Transaction.newBuilder().setRawData(rawtransactionBuilder.build()).build();
+
     if (transaction == null || transaction.getRawData().getContractCount() == 0){
       return null;
     }
