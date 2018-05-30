@@ -169,7 +169,7 @@ public class TronClient {
   public JSONObject backupWallet(String password) {
       JSONObject json_obj = new JSONObject();
 
-	if (wallet == null || !wallet.isLoginState()) {
+	if (wallet == null) {
         json_obj.put("result", FAILED);
         json_obj.put("reason", "Not logged in!");
 	    return json_obj;
@@ -210,7 +210,7 @@ public class TronClient {
 
   public JSONObject prepareTransaction(String toAddress, long amount){
       JSONObject json_obj = new JSONObject();
-	if (wallet == null || !wallet.isLoginState()) {
+	if (wallet == null) {
         json_obj.put("result", FAILED);
         json_obj.put("reason", "Unable to create transaction. Please login in first.");
 	  return json_obj;
@@ -357,7 +357,7 @@ public class TronClient {
   public JSONObject signTransaction(String hextx) {
       JSONObject json_obj = new JSONObject();
 
-	if (wallet == null || !wallet.isLoginState()) {
+	if (wallet == null) {
         json_obj.put("result", FAILED);
         json_obj.put("reason", "Unable to sign transaction. Please login in first.");
 	    return json_obj;
@@ -468,8 +468,9 @@ public class TronClient {
 
   public JSONObject getTransactions(String userAddress){
 	  JSONObject json_obj = new JSONObject();
-
-	  if (wallet == null || !wallet.isLoginState()) {
+		System.out.println("Wallet is null: " + wallet == null);
+	  System.out.println("Wallet not logged in: " + !wallet.isLoginState());
+	  if (wallet == null) {
 		  json_obj.put("result", FAILED);
 		  json_obj.put("reason", "Unable to get transactions. Please login in first.");
 		  return json_obj;

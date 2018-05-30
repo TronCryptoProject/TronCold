@@ -64,6 +64,7 @@ public class WalletClient {
   private Encryption encryption;
 
   {
+    FilePath = System.getProperty("userPath") + "/" + FilePath;
     try{
       InputStream inputStream = getClass().getResourceAsStream("/tronks.ks");
       String data = FileUtil.readFromInputStream(inputStream);
@@ -287,7 +288,7 @@ public class WalletClient {
 
   private static String getFileEncryptData(){
     try {
-      File file = new File("access");
+      File file = new File(System.getProperty("userPath") + "/access");
       FileInputStream fs = new FileInputStream(file);
       byte[] str = new byte[(int) file.length()];
       fs.read(str);
@@ -299,7 +300,7 @@ public class WalletClient {
 
   private void writeEncryptData(byte[] bytes){
     try{
-      File file = new File("access");
+      File file = new File(System.getProperty("userPath") + "/access");
       FileOutputStream fos = new FileOutputStream(file);
       fos.write(bytes);
       fos.close();

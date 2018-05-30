@@ -56,7 +56,9 @@ public class TronClientAPI {
         privKey = encryption.decryptText(privKey);
 
         JSONObject json_obj = tronClient.importWallet(password, privKey);
-        tronClient.login(password);
+        System.out.println("import result: " + json_obj);
+        JSONObject loggedin = tronClient.login(password);
+        System.out.println("loggedin result: " + loggedin);
         return encryption.encryptObject(json_obj);
     }
 
