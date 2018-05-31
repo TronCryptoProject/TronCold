@@ -302,17 +302,33 @@ public class TronClient {
 			  json_obj.put("refblocknum", transaction.getRawData().getRefBlockNum());
 
 			  Transaction.Contract contract =  transaction.getRawData().getContract(0);
-			  final Contract.TransferContract transferContract = contract.getParameter().
-					  unpack(Contract.TransferContract.class);
-			  final byte[] addressBytes = transferContract.getOwnerAddress().toByteArray();
-			  final String addressHex = WalletClient.encode58Check(addressBytes);
-			  final byte[] toAddressBytes = transferContract.getToAddress().toByteArray();
-			  final String toAddressHex = WalletClient.encode58Check(toAddressBytes);
-			  final long amount = transferContract.getAmount();
+		  	  if (contract.getType() == Transaction.Contract.ContractType.TransferContract){
+				  final Contract.TransferContract transferContract = contract.getParameter().
+						  unpack(Contract.TransferContract.class);
+				  final byte[] addressBytes = transferContract.getOwnerAddress().toByteArray();
+				  final String addressHex = WalletClient.encode58Check(addressBytes);
+				  final byte[] toAddressBytes = transferContract.getToAddress().toByteArray();
+				  final String toAddressHex = WalletClient.encode58Check(toAddressBytes);
+				  final long amount = transferContract.getAmount();
 
-			  json_obj.put("from", addressHex);
-			  json_obj.put("to", toAddressHex);
-			  json_obj.put("amount", amount);
+				  json_obj.put("from", addressHex);
+				  json_obj.put("to", toAddressHex);
+				  json_obj.put("amount", amount);
+			  }else if (contract.getType() == Transaction.Contract.ContractType.VoteWitnessContract){
+				  final Contract.VoteWitnessContract transferContract = contract.getParameter().
+						  unpack(Contract.VoteWitnessContract.class);
+				  final byte[] addressBytes = transferContract.getOwnerAddress().toByteArray();
+				  final String addressHex = WalletClient.encode58Check(addressBytes);
+				  json_obj.put("from", addressHex);
+				  json_obj.put("to", "Witness Contract");
+				  json_obj.put("amount", transferContract.getVotesCount());
+			  }else{
+				  json_obj.put("from", "");
+				  json_obj.put("to", "");
+				  json_obj.put("amount", "");
+			  }
+
+
 
 
 		  }catch(InvalidProtocolBufferException e){
