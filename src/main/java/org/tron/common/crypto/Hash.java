@@ -27,7 +27,8 @@ import java.security.Security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tron.common.crypto.jce.TronCastleProvider;
-import org.tron.core.config.Parameter.CommonConstant;
+import org.tron.common.utils.ByteArray;
+import org.tron.walletserver.WalletClient;
 
 public class Hash {
 
@@ -65,7 +66,7 @@ public class Hash {
     MessageDigest digest;
     try {
       digest = MessageDigest.getInstance(HASH_256_ALGORITHM_NAME,
-          CRYPTO_PROVIDER);
+              CRYPTO_PROVIDER);
       digest.update(input);
       return digest.digest();
     } catch (NoSuchAlgorithmException e) {
@@ -75,11 +76,23 @@ public class Hash {
 
   }
 
+  /**
+   * Keccak-256 hash function.
+   *
+   * @param hexInput hex encoded input data with optional 0x prefix
+   * @return hash value as hex encoded string
+   */
+  public static String sha3(String hexInput) {
+    byte[] bytes = ByteArray.fromHexString(hexInput);
+    byte[] result = sha3(bytes);
+    return ByteArray.toHexString(result);
+  }
+
   public static byte[] sha3(byte[] input1, byte[] input2) {
     MessageDigest digest;
     try {
       digest = MessageDigest.getInstance(HASH_256_ALGORITHM_NAME,
-          CRYPTO_PROVIDER);
+              CRYPTO_PROVIDER);
       digest.update(input1, 0, input1.length);
       digest.update(input2, 0, input2.length);
       return digest.digest();
@@ -101,7 +114,7 @@ public class Hash {
     MessageDigest digest;
     try {
       digest = MessageDigest.getInstance(HASH_256_ALGORITHM_NAME,
-          CRYPTO_PROVIDER);
+              CRYPTO_PROVIDER);
       digest.update(input, start, length);
       return digest.digest();
     } catch (NoSuchAlgorithmException e) {
@@ -114,7 +127,7 @@ public class Hash {
     MessageDigest digest;
     try {
       digest = MessageDigest.getInstance(HASH_512_ALGORITHM_NAME,
-          CRYPTO_PROVIDER);
+              CRYPTO_PROVIDER);
       digest.update(input);
       return digest.digest();
     } catch (NoSuchAlgorithmException e) {
@@ -132,7 +145,7 @@ public class Hash {
   public static byte[] sha3omit12(byte[] input) {
     byte[] hash = sha3(input);
     byte[] address = copyOfRange(hash, 11, hash.length);
-    address[0] = CommonConstant.ADD_PRE_FIX_BYTE;
+    address[0] = WalletClient.getAddressPreFixByte();
     return address;
   }
 }

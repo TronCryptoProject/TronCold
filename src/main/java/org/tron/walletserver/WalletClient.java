@@ -57,6 +57,7 @@ class WitnessComparator implements Comparator {
 
 public class WalletClient {
 
+  private static byte addressPreFixByte = CommonConstant.ADD_PRE_FIX_BYTE_MAINNET;
   private static final Logger logger = LoggerFactory.getLogger("WalletClient");
   private static String FilePath = "store";
   private ECKey ecKey = null;
@@ -522,8 +523,13 @@ public class WalletClient {
     return true;
   }
 
+  public static byte getAddressPreFixByte() {
+    return addressPreFixByte;
+  }
+
+
   public static boolean addressValid(byte[] address) {
-    if (address == null || address.length == 0) {
+    if (ArrayUtils.isEmpty(address)) {
       logger.warn("Warning: Address is empty !!");
       return false;
     }
@@ -533,8 +539,8 @@ public class WalletClient {
       return false;
     }
     byte preFixbyte = address[0];
-    if (preFixbyte != CommonConstant.ADD_PRE_FIX_BYTE) {
-      logger.warn("Warning: Address need prefix with " + CommonConstant.ADD_PRE_FIX_BYTE + " but "
+    if (preFixbyte != WalletClient.getAddressPreFixByte()) {
+      logger.warn("Warning: Address need prefix with " + WalletClient.getAddressPreFixByte() + " but "
               + preFixbyte + " !!");
       return false;
     }
@@ -572,11 +578,6 @@ public class WalletClient {
   public static byte[] decodeFromBase58Check(String addressBase58) {
     if (StringUtils.isEmpty(addressBase58)) {
       logger.warn("Warning: Address is empty !!");
-      return null;
-    }
-    if (addressBase58.length() != CommonConstant.BASE58CHECK_ADDRESS_SIZE) {
-      logger.warn("Warning: Base58 address length need " + CommonConstant.BASE58CHECK_ADDRESS_SIZE
-              + " but " + addressBase58.length() + " !!");
       return null;
     }
     byte[] address = decode58Check(addressBase58);
